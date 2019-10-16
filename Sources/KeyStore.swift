@@ -149,8 +149,8 @@ public final class KeyStore {
         case .encryptedKey:
             newKey = try KeystoreKey(password: newPassword, key: privateKey)
         case .hierarchicalDeterministicWallet:
-            let keyData = exportPrivateKey(account: account, password: password)
-            newKey = try KeystoreKey(password: newPassword, key: privateKey)
+            let keyData = try exportPrivateKey(account: account, password: password)
+            newKey = try KeystoreKey(password: newPassword, key: keyData)
 //            guard var string = String(data: privateKey, encoding: .ascii) else {
 //                throw EncryptError.invalidMnemonic
 //            }
