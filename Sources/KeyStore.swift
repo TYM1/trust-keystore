@@ -149,16 +149,12 @@ public final class KeyStore {
         case .encryptedKey:
             newKey = try KeystoreKey(password: newPassword, key: privateKey)
         case .hierarchicalDeterministicWallet:
-            guard var string = String(data: privateKey, encoding: .ascii) else {
-                throw EncryptError.invalidMnemonic
-            }
-            print("1:" + string)
-            let tempText = "\0"
-            if string.hasSuffix(tempText) {
-                string = string.replacingOccurrences(of: tempText, with: "")
-            }
-            print("2:" + string)
-            newKey = try KeystoreKey(password: newPassword, mnemonic: string, passphrase: key.passphrase, derivationPath: key.derivationPath)
+            let keyData = exportPrivateKey(account: account, password: password)
+            newKey = try KeystoreKey(password: newPassword, key: privateKey)
+//            guard var string = String(data: privateKey, encoding: .ascii) else {
+//                throw EncryptError.invalidMnemonic
+//            }
+//            newKey = try KeystoreKey(password: newPassword, mnemonic: string, passphrase: key.passphrase, derivationPath: key.derivationPath)
         }
         return try JSONEncoder().encode(newKey)
     }
